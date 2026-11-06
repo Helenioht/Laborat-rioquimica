@@ -11,7 +11,12 @@
 main{max-width:1100px;margin:auto;padding:18px 14px 45px}.head{display:flex;justify-content:center;align-items:center;gap:13px;padding:12px 0 20px}.logo{width:64px;height:64px;flex:none}h1{font-size:clamp(24px,5vw,38px);line-height:1.1;margin:0}.muted,.desc{color:var(--muted)}.muted{margin:7px 0 0}
 .stats,nav,.actions,.chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.stats{margin-bottom:18px}.stat{background:#10243a;border:1px solid var(--line);border-radius:10px;padding:7px 12px;color:var(--muted);font-size:13px}.stat b{color:var(--cyan);font-size:17px;margin-left:5px}
 .tab{cursor:pointer;border-radius:10px;font-weight:750;background:#122943;color:var(--muted);border:1px solid var(--line);padding:10px 14px}.tab.active{background:var(--cyan);color:#062039}.panel{display:none}.panel.active{display:block}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{background:linear-gradient(145deg,var(--panel),#0e1d30);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 10px 25px #0002}.wide{grid-column:1/-1}h2{font-size:19px;margin:0 0 5px}.desc{font-size:13px;margin:0 0 13px}
-label{display:block;font-weight:700;margin:10px 0 5px}input{width:100%;padding:12px;background:#081729;border:1px solid #456482;border-radius:10px;color:var(--txt);font-size:16px}input:focus{outline:2px solid var(--cyan)}.hint{font-size:12px;color:var(--muted);margin-top:5px}
+label{display:block;font-weight:700;margin:10px 0 5px}input{width:100%;padding:12px;background:#081729;border:1px solid #456482;border-radius:10px;color:var(--txt);font-size:16px}input:focus{outline:2px solid var(--cyan)}
+.suggestions{display:none;background:#0b2035;border:1px solid #65d6ff;border-radius:10px;margin-top:4px;max-height:230px;overflow-y:auto;box-shadow:0 8px 20px #0006;position:relative;z-index:5}
+.suggestions.open{display:block}
+.suggestion{display:block;width:100%;text-align:left;margin:0;border:0;border-radius:0;background:transparent;color:#eef7ff;padding:10px 12px;font-size:14px;font-weight:600}
+.suggestion:hover,.suggestion:focus{background:#244766;outline:0}
+.hint{font-size:12px;color:var(--muted);margin-top:5px}
 button{cursor:pointer;border:0;border-radius:10px;background:var(--cyan);color:#062039;font-weight:800;padding:10px 14px;margin-top:10px;font-size:14px}.secondary{background:#294663;color:var(--txt)}.ghost{background:transparent;border:1px solid var(--line);color:var(--muted)}.chip{cursor:pointer;background:#1c3855;border:1px solid #385c7d;color:#d8efff;padding:5px 10px;border-radius:30px;font-size:12px;margin-top:8px}
 .result{background:#081729;border:1px dashed #3b5d7e;border-radius:11px;padding:13px;margin-top:12px;min-height:58px;overflow-wrap:anywhere;color:var(--muted)}.formula{font-size:29px;font-weight:850;color:var(--green)}.small{font-size:12px;color:var(--muted);margin-top:6px}
 .periodic{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:5px;margin-top:15px}.el{background:#493c25;border:1px solid #62758b;color:white;border-radius:7px;padding:6px 2px;cursor:pointer;min-width:0}.el.nonmetal{background:#17463f}.el.noble{background:#263d69}.el.metalloid{background:#49334f}.el b{display:block;font-size:17px}.el small{display:block;font-size:9px;white-space:nowrap;overflow:hidden}.tablewrap{overflow:auto}table{border-collapse:collapse;width:100%;font-size:13px}td,th{text-align:left;padding:9px;border-bottom:1px solid var(--line)}th{color:var(--cyan)}.note{border-left:3px solid #ffd27d;background:#3a301d55;padding:10px;margin-top:13px;font-size:12px;color:#f4dfb4}.saved{display:flex;justify-content:space-between;gap:8px;align-items:center;border-bottom:1px solid var(--line);padding:9px 0}.saved small{display:block;color:var(--muted)}.footer{text-align:center;color:#829bb4;font-size:11px;padding:24px 0}
@@ -28,18 +33,18 @@ button{cursor:pointer;border:0;border-radius:10px;background:var(--cyan);color:#
 
 <section class="panel active" id="consulta"><div class="grid">
 <article class="card"><h2>Nome → símbolo ou fórmula</h2><p class="desc">Comece a digitar: sugestões aparecerão automaticamente.</p>
-<label for="nameInput">Nome do elemento ou substância</label><input id="nameInput" list="nameOptions" placeholder="Ex.: hidrogênio, água, ouro" autocomplete="off"><datalist id="nameOptions"></datalist>
+<label for="nameInput">Nome do elemento ou substância</label><input id="nameInput" list="nameOptions" placeholder="Ex.: hidrogênio, água, ouro" autocomplete="off"><datalist id="nameOptions"></datalist><div class="suggestions" id="nameSuggestions"></div>
 <div class="hint">Escolha uma sugestão ou escreva o nome completo.</div><button onclick="byName()">Identificar</button><div class="result" id="nameResult">O resultado aparecerá aqui.</div></article>
 <article class="card"><h2>Símbolo ou fórmula → nome</h2><p class="desc">Sugestões aparecem enquanto você digita.</p>
-<label for="formulaInput">Símbolo ou fórmula química</label><input id="formulaInput" list="formulaOptions" placeholder="Ex.: H, Au, H2O, CO2" autocomplete="off"><datalist id="formulaOptions"></datalist>
+<label for="formulaInput">Símbolo ou fórmula química</label><input id="formulaInput" list="formulaOptions" placeholder="Ex.: H, Au, H2O, CO2" autocomplete="off"><datalist id="formulaOptions"></datalist><div class="suggestions" id="formulaSuggestions"></div>
 <div class="hint">Use a grafia correta: Au é ouro; AU não é um símbolo válido.</div><button onclick="byFormula()">Identificar</button><div class="result" id="formulaResult">O nome aparecerá aqui.</div></article>
 <article class="card wide"><h2>Combinar elementos</h2><p class="desc">Digite dois reagentes separados por +. O campo oferece sugestões de nomes e fórmulas.</p>
-<label for="mixInput">Reagentes</label><input id="mixInput" list="mixOptions" placeholder="Ex.: hidrogênio + oxigênio" autocomplete="off"><datalist id="mixOptions"></datalist>
+<label for="mixInput">Reagentes</label><input id="mixInput" list="mixOptions" placeholder="Ex.: hidrogênio + oxigênio" autocomplete="off"><datalist id="mixOptions"></datalist><div class="suggestions" id="mixSuggestions"></div>
 <button onclick="combine()">Investigar combinação</button><div class="result" id="mixResult">O resultado aparecerá aqui.</div>
 <div class="chips"><span class="chip" onclick="fill('mixInput','hidrogênio + oxigênio')">hidrogênio + oxigênio</span><span class="chip" onclick="fill('mixInput','carbono + oxigênio')">carbono + oxigênio</span><span class="chip" onclick="fill('mixInput','sódio + cloro')">sódio + cloro</span><span class="chip" onclick="fill('mixInput','ferro + oxigênio')">ferro + oxigênio</span></div>
 </article></div></section>
 
-<section class="panel" id="tabela"><article class="card"><h2>Tabela periódica pesquisável</h2><p class="desc">Clique em qualquer elemento para consultar seus dados. Também pode pesquisar pelo nome ou símbolo.</p><input id="elementSearch" list="nameOptions" placeholder="Pesquisar elemento pelo nome ou símbolo"><button onclick="searchElement()">Pesquisar elemento</button><div class="periodic" id="periodic"></div><div class="result" id="elementResult">Selecione um elemento.</div></article></section>
+<section class="panel" id="tabela"><article class="card"><h2>Tabela periódica pesquisável</h2><p class="desc">Clique em qualquer elemento para consultar seus dados. Também pode pesquisar pelo nome ou símbolo.</p><input id="elementSearch" list="nameOptions" placeholder="Pesquisar elemento pelo nome ou símbolo"><div class="suggestions" id="elementSuggestions"></div><button onclick="searchElement()">Pesquisar elemento</button><div class="periodic" id="periodic"></div><div class="result" id="elementResult">Selecione um elemento.</div></article></section>
 <section class="panel" id="reacoes"><article class="card"><h2>Biblioteca de reações conhecidas</h2><div class="tablewrap"><table><thead><tr><th>Reação</th><th>Produto</th></tr></thead><tbody id="reactionRows"></tbody></table></div><div class="note">Nem toda mistura provoca reação. Temperatura, pressão, concentração e energia podem alterar os resultados. Este aplicativo é educativo: não faça misturas químicas em casa com base nestes exemplos.</div></article></section>
 <section class="panel" id="bloco"><article class="card"><h2>Meu bloco de anotações</h2><p class="desc">Salve resultados neste navegador, copie ou baixe em arquivo de texto.</p><label for="noteText">Anotação livre</label><input id="noteText" placeholder="Escreva uma observação"><div class="actions"><button onclick="saveFreeNote()">Salvar</button><button class="secondary" onclick="exportNotes()">Copiar tudo</button><button class="ghost" onclick="downloadNotes()">Baixar TXT</button></div><div class="result" id="savedList"></div><button class="ghost" onclick="clearNotes()">Apagar anotações</button></article></section>
 <div class="footer">Laboratório Virtual de Helenio • Anotações armazenadas neste dispositivo</div>
@@ -61,12 +66,57 @@ elements.forEach(e=>{elementByName.set(norm(e.name),e);elementBySymbol.set(e.sym
 const substances=[
 ['água','H2O','Água'],['água pura','H2O','Água'],['gás carbônico','CO2','Dióxido de carbono'],['dióxido de carbono','CO2','Dióxido de carbono'],['monóxido de carbono','CO','Monóxido de carbono'],['sal de cozinha','NaCl','Cloreto de sódio'],['cloreto de sódio','NaCl','Cloreto de sódio'],['amônia','NH3','Amônia'],['metano','CH4','Metano'],['ozônio','O3','Ozônio'],['água oxigenada','H2O2','Peróxido de hidrogênio'],['ácido clorídrico','HCl','Ácido clorídrico'],['ácido sulfúrico','H2SO4','Ácido sulfúrico'],['ácido acético','CH3COOH','Ácido acético'],['vinagre','CH3COOH','Ácido acético'],['bicarbonato de sódio','NaHCO3','Bicarbonato de sódio'],['carbonato de cálcio','CaCO3','Carbonato de cálcio'],['calcário','CaCO3','Carbonato de cálcio'],['sílica','SiO2','Dióxido de silício'],['areia','SiO2','Dióxido de silício'],['glicose','C6H12O6','Glicose'],['etanol','C2H6O','Etanol'],['álcool etílico','C2H6O','Etanol'],['óxido de ferro','Fe2O3','Óxido de ferro(III)'],['ferrugem','Fe2O3','Óxido de ferro(III)'],['óxido de cálcio','CaO','Óxido de cálcio'],['cal virgem','CaO','Óxido de cálcio'],['hidróxido de sódio','NaOH','Hidróxido de sódio'],['soda cáustica','NaOH','Hidróxido de sódio'],['propano','C3H8','Propano'],['nitrogênio molecular','N2','Nitrogênio'],['oxigênio molecular','O2','Oxigênio'],['hidrogênio molecular','H2','Hidrogênio'],['cloro molecular','Cl2','Cloro']
 ];
-const byName=new Map(),byFormula=new Map();
-elements.forEach(e=>{byName.set(norm(e.name),{formula:e.symbol,label:e.name,element:e});byFormula.set(e.symbol,{label:e.name,formula:e.symbol,element:e})});
-substances.forEach(([n,f,l])=>{byName.set(norm(n),{formula:f,label:l});byFormula.set(f,{label:l,formula:f})});
-function buildAutocomplete(){const names=[...elements.map(e=>e.name+' ('+e.symbol+')'),...substances.map(s=>s[0])];$('nameOptions').innerHTML=names.map(x=>`<option value="${esc(x)}">`).join('');$('mixOptions').innerHTML=[...names,...elements.map(e=>e.symbol),...substances.map(s=>s[1])].map(x=>`<option value="${esc(x)}">`).join('');$('formulaOptions').innerHTML=[...new Set([...elements.map(e=>e.symbol),...substances.map(s=>s[1])])].map(x=>`<option value="${esc(x)}">`).join('')}
-function resolveName(q){let v=norm(q);let r=byName.get(v);if(r)return r;let m=v.match(/^(.+?)\s*\(([a-z]{1,2})\)$/i);if(m)return byName.get(norm(m[1]))||byFormula.get(m[2]);return null}
-function resolveFormula(q){let v=String(q).trim().replace(/\s/g,'');return byFormula.get(v)||null}
+const nameLookup=new Map(),formulaLookup=new Map();
+elements.forEach(e=>{nameLookup.set(norm(e.name),{formula:e.symbol,label:e.name,element:e});formulaLookup.set(e.symbol,{label:e.name,formula:e.symbol,element:e})});
+substances.forEach(([n,f,l])=>{nameLookup.set(norm(n),{formula:f,label:l});formulaLookup.set(f,{label:l,formula:f})});
+function buildAutocomplete(){
+  const names=[...elements.map(e=>e.name+' ('+e.symbol+')'),...substances.map(s=>s[0])];
+  const formulas=[...new Set([...elements.map(e=>e.symbol),...substances.map(s=>s[1])])];
+  const mixes=[...new Set([...names,...elements.map(e=>e.symbol),...substances.map(s=>s[1])])];
+  $('nameOptions').innerHTML=names.map(x=>`<option value="${esc(x)}">`).join('');
+  $('mixOptions').innerHTML=mixes.map(x=>`<option value="${esc(x)}">`).join('');
+  $('formulaOptions').innerHTML=formulas.map(x=>`<option value="${esc(x)}">`).join('');
+  attachAutocomplete('nameInput','nameSuggestions',names);
+  attachAutocomplete('formulaInput','formulaSuggestions',formulas);
+  attachAutocomplete('mixInput','mixSuggestions',mixes);
+  attachAutocomplete('elementSearch','elementSuggestions',names.filter(x=>elements.some(e=>x===e.name+' ('+e.symbol+')')));
+}
+function attachAutocomplete(inputId,boxId,items){
+  const input=$(inputId),box=$(boxId);
+  let shown=[],active=-1;
+  function close(){box.classList.remove('open');box.innerHTML='';shown=[];active=-1}
+  function render(){
+    const q=norm(input.value);
+    if(!q){close();return}
+    shown=items.filter(v=>norm(v).includes(q)).slice(0,14);
+    if(!shown.length){close();return}
+    active=-1;
+    box.innerHTML=shown.map((v,i)=>`<button type="button" class="suggestion" data-index="${i}">${esc(v)}</button>`).join('');
+    box.classList.add('open');
+  }
+  input.addEventListener('input',render);
+  input.addEventListener('focus',render);
+  input.addEventListener('keydown',e=>{
+    if(!box.classList.contains('open'))return;
+    if(e.key==='ArrowDown'){e.preventDefault();active=Math.min(active+1,shown.length-1)}
+    else if(e.key==='ArrowUp'){e.preventDefault();active=Math.max(active-1,0)}
+    else if(e.key==='Escape'){close();return}
+    else if(e.key==='Enter'&&active>=0){e.preventDefault();input.value=shown[active];close();return}
+    else return;
+    [...box.querySelectorAll('button')].forEach((b,i)=>b.style.background=i===active?'#244766':'transparent');
+  });
+  box.addEventListener('mousedown',e=>{
+    const b=e.target.closest('button[data-index]');
+    if(!b)return;
+    e.preventDefault();
+    input.value=shown[Number(b.dataset.index)]||'';
+    close();
+    input.focus();
+  });
+  input.addEventListener('blur',()=>setTimeout(close,180));
+}
+function resolveName(q){let v=norm(q);let r=nameLookup.get(v);if(r)return r;let m=v.match(/^(.+?)\s*\(([a-z]{1,2})\)$/i);if(m)return nameLookup.get(norm(m[1]))||formulaLookup.get(m[2]);return null}
+function resolveFormula(q){let v=String(q).trim().replace(/\s/g,'');return formulaLookup.get(v)||null}
 function resultControls(title,content){return `<div class="actions"><button class="secondary" onclick="copyText(${JSON.stringify(content).replace(/</g,'\\u003c')})">Copiar</button><button class="ghost" onclick="saveItem(${JSON.stringify(title)},${JSON.stringify(content)})">Salvar no bloco</button></div>`}
 function byName(){used();let q=$('nameInput').value,r=resolveName(q);if(!r){$('nameResult').textContent='Não encontrei esse nome. Selecione uma sugestão da lista ou confira a escrita.';return}let extra=r.element?`Número atômico: ${r.element.n}`:'Substância química';$('nameResult').innerHTML=`<div class="formula">${esc(r.formula)}</div><b>${esc(r.label)}</b><div class="small">${extra}</div>${resultControls(r.label,r.label+' — '+r.formula)}`}
 function byFormula(){used();let q=$('formulaInput').value,r=resolveFormula(q);$('formulaResult').innerHTML=r?`<b>${esc(r.label)}</b><div class="small">Símbolo/fórmula: ${esc(r.formula)}${r.element?' • Número atômico: '+r.element.n:''}</div>${resultControls(r.label,r.label+' — '+r.formula)}`:'Não identifiquei essa fórmula. Use a lista de sugestões e respeite maiúsculas/minúsculas.'}
@@ -75,7 +125,7 @@ function reagentKey(s){let q=norm(s);let r=resolveName(q);if(r?.element)return r
 function combine(){used();let parts=$('mixInput').value.split('+').map(x=>x.trim()).filter(Boolean);if(parts.length!==2){$('mixResult').textContent='Digite dois reagentes separados pelo sinal +.';return}let keys=parts.map(reagentKey);let r=reactions.find(x=>x.keys.every(k=>keys.includes(k)));if(!r){$('mixResult').textContent='Esta combinação não está cadastrada. Não é seguro inventar o produto: o resultado depende das condições e algumas misturas não reagem.';return}$('mixResult').innerHTML=`<div class="formula">${esc(r.p)}</div><b>Equação balanceada:</b> ${esc(r.eq)}<div class="small">${esc(r.note)}</div>${resultControls(r.p,r.eq+' — '+r.p)}`}
 function showElement(e){used();$('elementResult').innerHTML=`<div class="formula">${e.symbol}</div><b>${e.name}</b><div class="small">Número atômico: ${e.n}</div>${resultControls(e.name,e.name+' — '+e.symbol+' — número atômico '+e.n)}`}
 function renderPeriodic(){$('periodic').innerHTML=elements.map(e=>`<button class="el" onclick="showElement(elements[${e.n-1}])"><small>${e.n}</small><b>${e.symbol}</b><small>${e.name}</small></button>`).join('')}
-function searchElement(){let q=norm($('elementSearch').value),e=elementByName.get(q)||elementBySymbol.get($('elementSearch').value.trim());if(!e){let r=resolveName($('elementSearch').value);e=r?.element}if(e)showElement(e);else $('elementResult').textContent='Elemento não encontrado. Escolha uma sugestão.'}
+function searchElement(){let q=norm($('elementSearch').value),raw=$('elementSearch').value.trim(),e=elementByName.get(q)||elementBySymbol.get(raw)||elementBySymbol.get(raw.toUpperCase());if(!e){let r=resolveName($('elementSearch').value);e=r?.element}if(e)showElement(e);else $('elementResult').textContent='Elemento não encontrado. Escolha uma sugestão.'}
 function copyText(t){if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(t).then(()=>alert('Copiado! Agora cole no seu bloco de anotações.')).catch(()=>fallbackCopy(t))}else fallbackCopy(t)}
 function fallbackCopy(t){let a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');alert('Texto copiado!')}catch(e){alert('Selecione e copie o texto manualmente.')}a.remove()}
 function saveItem(title,content){notes.unshift({title,content,date:new Date().toLocaleString('pt-BR')});notes=notes.slice(0,150);localStorage.setItem('helenioNotes',JSON.stringify(notes));renderNotes();stats()}
